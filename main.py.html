@@ -1,0 +1,67 @@
+<html>
+<head>
+<title>main.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6a8759;}
+.s3 { color: #6897bb;}
+.s4 { color: #808080;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+main.py</font>
+</center></td></tr></table>
+<pre><span class="s0">from </span><span class="s1">bs4 </span><span class="s0">import </span><span class="s1">BeautifulSoup</span>
+<span class="s0">import </span><span class="s1">lxml</span>
+<span class="s0">import </span><span class="s1">requests</span>
+
+<span class="s1">response = requests.get(</span><span class="s2">&quot;https://news.ycombinator.com&quot;</span><span class="s1">)</span>
+<span class="s1">yc_web_page = response.text</span>
+
+<span class="s1">soup = BeautifulSoup(yc_web_page</span><span class="s0">, </span><span class="s2">&quot;html.parser&quot;</span><span class="s1">)</span>
+<span class="s1">articles = soup.find_all(name=</span><span class="s2">&quot;a&quot;</span><span class="s0">, </span><span class="s1">class_=</span><span class="s2">&quot;titlelink&quot;</span><span class="s1">)</span>
+<span class="s1">article_texts = []</span>
+<span class="s1">article_links = []</span>
+
+<span class="s0">for </span><span class="s1">article_tag </span><span class="s0">in </span><span class="s1">articles:</span>
+    <span class="s1">article_text = article_tag.get_text()</span>
+    <span class="s1">article_texts.append(article_text)</span>
+    <span class="s1">article_link = article_tag.get(</span><span class="s2">&quot;href&quot;</span><span class="s1">)</span>
+    <span class="s1">article_links.append(article_link)</span>
+
+<span class="s1">article_upvotes = [int(score.getText().split()[</span><span class="s3">0</span><span class="s1">]) </span><span class="s0">for </span><span class="s1">score </span><span class="s0">in </span><span class="s1">soup.find_all(name=</span><span class="s2">&quot;span&quot;</span><span class="s0">, </span><span class="s1">class_=</span><span class="s2">&quot;score&quot;</span><span class="s1">)]</span>
+
+<span class="s4"># print(article_texts)</span>
+<span class="s4"># print(article_links)</span>
+<span class="s4"># print(article_upvotes)</span>
+
+<span class="s1">most_upvotes = max(article_upvotes)</span>
+<span class="s4"># print(most_upvotes)</span>
+
+<span class="s1">index = article_upvotes.index(most_upvotes)</span>
+<span class="s1">print(index)</span>
+<span class="s4"># index_text = article_texts.index(most_upvotes)</span>
+<span class="s4"># index_link = article_links.index(most_upvotes)</span>
+
+<span class="s1">print(article_texts[index])</span>
+<span class="s1">print(article_links[index])</span>
+
+<span class="s4">#</span>
+<span class="s4"># with open(&quot;website.html&quot;, 'r') as file:</span>
+<span class="s4">#     contents = file.read()</span>
+<span class="s4">#     # print(contents)</span>
+<span class="s4">#</span>
+<span class="s4"># soup = BeautifulSoup(contents, &quot;html.parser&quot;)</span>
+<span class="s4">#</span>
+<span class="s4"># find_p = soup.find_all(name=&quot;p&quot;)</span>
+<span class="s4"># print(find_p)</span>
+<span class="s4">#</span>
+<span class="s4"># for tag in find_p:</span>
+<span class="s4">#     print(tag.gettext(&quot;href&quot;))</span></pre>
+</body>
+</html>
